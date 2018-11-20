@@ -15,7 +15,7 @@ endif
 
 DIR_OBJ=./obj
 DIR_EXE=./exe
-DIR_INCLUDE=../../LAB3/ise_gr09_lab03/src
+DIR_INCLUDE=../../../LAB3/ise_gr09_lab03/src
 
 all: universalDrawer
 
