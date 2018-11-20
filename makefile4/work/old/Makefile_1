@@ -1,0 +1,42 @@
+############ VARIABLES ############
+
+## PATHs ##
+# header files path
+IPATH=./include
+# object files path
+OPATH=./obj
+# exe file path
+EPATH=./exe
+
+## OPTIONS ##
+COMPILER=gcc
+OPTIONS=-Wall -iquote $(IPATH)
+COMPILE=$(COMPILER) $(OPTIONS) -c
+LINK=$(COMPILER) $(OPTIONS)
+
+## MAIN FILE NAME ##
+MAIN=main
+
+_OBJ = $(MAIN).o draw.o read.o
+OBJ = $(patsubst %, $(OPATH)/%, $(_OBJ))
+
+############ BODY #############
+
+all: $(EPATH)/$(MAIN)
+
+$(EPATH)/$(MAIN): $(OBJ)
+	$(LINK) $(OBJ) -o $@
+
+$(OPATH)/$(MAIN).o: $(MAIN).c $(IPATH)/draw.h $(IPATH)/read.h
+	$(COMPILE) $< -o $@	
+
+$(OPATH)/draw.o: draw.c $(IPATH)/draw.h $(IPATH)/shared.h
+	$(COMPILE) $< -o $@
+
+$(OPATH)/read.o: read.c $(IPATH)/read.h
+	$(COMPILE) $< -o $@
+
+# cleaning recipe
+.PHONY: clean
+clean:
+	rm -f $(OPATH)/*.o $(EPATH)/$(MAIN)	
