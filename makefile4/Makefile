@@ -35,10 +35,14 @@ all: $(EPATH)/$(MAIN)
 $(EPATH)/$(MAIN): $(OBJ)
 	$(LINK) $^ -o $@
 
-$(OPATH)/%.o: %.c $(IPATH)/draw.h $(IPATH)/read.h
+$(OPATH)/%.o: %.c $(IPATH)/draw.h $(IPATH)/read.h $(IPATH)/shared.h
 	$(COMPILE) $< -o $@	
 
 # cleaning recipe
 .PHONY: clean
 clean:
 	rm -f $(OPATH)/*.o $(EPATH)/$(MAIN)	
+
+.PHONY: test
+test:
+	# test

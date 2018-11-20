@@ -13,27 +13,14 @@
 int main(int argc, char** argv)
 {
 	// variable definitions
-	unsigned short int i = 0;
-	char cmdBuffer[maxCmdLength];
 	basicCmd cmdStruct;
 
-	// reset the buffer with harmless characters
-	for (i = 0; i < maxCmdLength; i++) {
-		cmdBuffer[i] = '\0';
-	}
-
-	// memory has already been reset because it's a global variable 
+	// memory and buffer array have already been reset because they are global variable 
 
 	// main reading loop
 	while (1) {
-		// right shift the elements in the buffer
-		for (i = 1; i < maxCmdLength; i++) {
-			cmdBuffer[i-1] = cmdBuffer[i];
-		}
-		// read the new character
-		cmdBuffer[maxCmdLength-1] = readChar();
 		// if there is a valid command in the buffer, execute it. Otherwise, loop
-		if ( readCommand(cmdBuffer, &cmdStruct) ) {
+		if ( readCommand(&cmdStruct) ) {
 			switch (cmdStruct.cmd) {
 		  	case POINT:
 		  		drawPoint(cmdStruct.x1, cmdStruct.y1, cmdStruct.m);

@@ -44,7 +44,6 @@ int char2int(char charIn) {
 // it reads an array in which a command can be present. If a valid command is recognized then the data structure is updated coherently
 //
 // INPUT
-// - cmdBuffer: the buffer array in which char from input peripheral are stored. The length of cmdBuffer allows it to contain a valid command.
 // - cmdStruc_pt: pointer to basicCommand struct type (this struct has to be instantiated by the caller).
 // OUTPUT
 // - returns a 1 if a valid command is read, otherwise it returns a 0
@@ -53,11 +52,15 @@ int char2int(char charIn) {
 // MEMORY NEEDS
 // it needs space for a definition of an int variable and a byte for a _Bool
 // MEMORY MODIFICATION
+// - cmdBuffer shift and storing a new char in last position
 // - *basicCommand memory locations: apart from the "cmd" field, the others are modificated even if the command is not valid
-int readCommand(char* cmdBuffer, basicCmd* cmdStruc_pt) {
+int readCommand(basicCmd* cmdStruc_pt) {
 
 	_Bool valid = 0;
 	unsigned int temp;
+
+	// read the new character
+	cmdBuffer[maxCmdLength-1] = readChar();
 
 	if ((int)cmdBuffer[minCmdOffset] == POINT) {
 		if ((temp = char2int(cmdBuffer[minCmdOffset+1])) != 10) {
@@ -174,6 +177,11 @@ int readCommand(char* cmdBuffer, basicCmd* cmdStruc_pt) {
 			default: 
 				break;
 		}
+	}
+
+	// right shift the elements of the buffer
+	for (int i = 1; i < maxCmdLength; i++) {
+		cmdBuffer[i-1] = cmdBuffer[i];
 	}
 
 	if (valid) { 
