@@ -3,6 +3,7 @@ IDIR= ../include
 ifdef CC
 else
 	CC=gcc
+endif
 CFLAGS= -I$(IDIR)
 
 #define for *.o files
@@ -20,4 +21,4 @@ main: $(OBJ)
 	$(CC) -o $@ $^ $(CFLAGS)
 .PHONY: clean
 clean:
-	rm -f $(ODIR)/*.o 
+	rm -f $(ODIR)/*.o main
