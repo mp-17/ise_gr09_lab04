@@ -3,16 +3,16 @@ IDIR= ../include
 ODIR= obj
 CFLAGS=-I$(IDIR)
 
-_DEPS= shared.h read.h draw.h
-DEPS= $(patsubst %,$(IDIR)/%,$(_DEPS))
+all: universalDrawer
 
-_OBJ= main.o read.o draw.o
-OBJ= $(patsubst %,$(ODIR)/%,$(_OBJ))
-
-$(ODIR)/%.o: %.c $(DEPS)
-	arm-none-eabi-gcc --specs=nosys.specs -static -c -o $@ $< $(CFLAGS)
-universalDrawer: $(OBJ)
-	arm-none-eabi-gcc --specs=nosys.specs -static -o $@ $^ $(CFLAGS)
+$(ODIR)/draw.o: draw.c $(IDIR)/draw.h $(IDIR)/shared.h
+	arm-none-eabi-gcc --specs=nosys.specs -static -c -o $(ODIR)/draw.o draw.c $(CFLAGS)
+$(ODIR)/read.o: read.c $(IDIR)/read.h
+	arm-none-eabi-gcc --specs=nosys.specs -static -c -o $(ODIR)/read.o read.c $(CFLAGS)
+$(ODIR)/main.o: main.c $(IDIR)/read.h $(IDIR)/draw.h
+	arm-none-eabi-gcc --specs=nosys.specs -static -c -o $(ODIR)/main.o main.c $(CFLAGS)
+universalDrawer: $(ODIR)/main.o $(ODIR)/read.o $(ODIR)/draw.o
+	arm-none-eabi-gcc --specs=nosys.specs -static -o universalDrawer $(ODIR)/main.o $(ODIR)/read.o $(ODIR)/draw.o $(CFLAGS)
 .PHONY: clean
 clean:
 	rm -f $(ODIR)/*.o main
