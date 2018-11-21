@@ -10,11 +10,17 @@ _OBJ = main.o draw.o read.o
 
 all: universalDrawer
 
-$(ODIR)/%.o: %.c $(DEPS)
-	$(CC) -c -Wall $< 
+universalDrawer: main.o draw.o read.o
+	$(CC) -static -o universalDrawer main.o draw.o read.o
 
-universalDrawer: $(_OBJ)
-	$(CC) -static -o $@ $(_OBJ)
+draw.o: draw.c shared.h draw.h
+	$(CC) -c -Wall -static draw.c
+
+read.o: read.c shared.h draw.h
+	$(CC) -c -Wall -static read.c
+
+main.o: main.c
+	$(CC) -c -Wall -static main.c
 
 .PHONY: clean
 
