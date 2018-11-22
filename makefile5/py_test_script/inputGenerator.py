@@ -1,6 +1,7 @@
 #!/bin/python3
 
 FNAME="common/cmd.txt"
+ENDMSG="Q"
 MAX_X=127
 MAX_Y=127
 MAX_XD=int(MAX_X/2-1)
@@ -28,6 +29,6 @@ while a < x :
         cmd='E'+('{0:03d}'.format(x1))+('{0:03d}'.format(y1))+('{0:03d}'.format(xd))+('{0:03d}'.format(yd))+str(mode)+'\n'
     f.write(cmd)    
     a+=1
-f.write("END")
+f.write(ENDMSG)
 f.close
     
