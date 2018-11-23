@@ -25,7 +25,7 @@ MAIN=main
 
 ## OBJECTS ##
 
-_OBJ = $(MAIN).o draw.o read.o
+_OBJ = $(MAIN).o draw.o read.o aid.o
 OBJ = $(patsubst %, $(OPATH)/%, $(_OBJ))
 
 ############ BODY #############
@@ -33,9 +33,11 @@ OBJ = $(patsubst %, $(OPATH)/%, $(_OBJ))
 all: $(EPATH)/$(MAIN)
 
 $(EPATH)/$(MAIN): $(OBJ)
+	mkdir -p $(EPATH)
 	$(LINK) $^ -o $@
 
-$(OPATH)/%.o: %.c $(IPATH)/draw.h $(IPATH)/read.h $(IPATH)/shared.h
+$(OPATH)/%.o: %.c $(IPATH)/draw.h $(IPATH)/read.h $(IPATH)/shared.h $(IPATH)/aid.h
+	mkdir -p $(OPATH)
 	$(COMPILE) $< -o $@	
 
 # cleaning recipe

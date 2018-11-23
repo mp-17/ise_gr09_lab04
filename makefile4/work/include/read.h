@@ -1,14 +1,12 @@
-#define POINT (int)'P'
-#define LINE (int)'L'
-#define ELLIPSE (int)'E'
+#define POINT (unsigned int)'P'
+#define LINE (unsigned int)'L'
+#define ELLIPSE (unsigned int)'E'
+#define QUIT (unsigned int)'Q'
 #define minCmdLength 8
 #define maxCmdLength 14
 #define minCmdOffset 6 // maxCmdLength-minCmdLength
 #define xMax 127
 #define yMax 127
-
-// array in which will be saved new characters. It will be controlled for command parsing
-static char cmdBuffer[maxCmdLength]; 
 
 // basicCmd contains
 // - cmd: the letter which encodes the command
@@ -31,38 +29,37 @@ typedef struct{
 } basicCmd;
 
 // readChar(void) 
-// reads from a peripheral input and returns a single char
+// reads from a peripheral input and returns the char casted to an unsigned int
 //
 // OUTPUT
-// returns one read char
+// returns one read char cast to unsigned int (-1 in case of EOF or error)
 // CALLED FUNCTIONS
 // - getc
 // MEMORY MODIFICATION
 // no memory modification
-char readChar(void);
+int readChar(void);
 
-// char2int(char charIn) 
-// reads from input an ASCII/UTF char and returns the corresponding digit in short int format. If the char was not representing 
-// a digit, it returns 10
+// ascii2digit(unsigned int asciiInt) 
+// reads from input an ASCII char and returns the corresponding digit in unsigned int format. If the char was not representing 
+// a digit, then it returns a number greater than 9
 //
 // OUTPUT
-// returns the digit which was represented in ASCII/UTF. If something goes wrong (i.e. the char was not a digit), 
-// it returns 10 
+// if the asciiInt in input is a ASCII code of a digit, the function returns the digit itself (unsigned int form)
 // CALLED FUNCTIONS
 // no function is called
 // MEMORY NEEDS
-// it needs 16 bits for a short int variable
+// no memory needs
 // MEMORY MODIFICATION
 // no memory modification
-int char2int(char charIn);
+unsigned int ascii2digit(unsigned int asciiInt);
 
-// readCommand(char* cmdBuffer, basicCmd* cmdStruc_pt)
+// readCommand(basicCmd* cmdStruc_pt)
 // it reads an array in which a command can be present. If a valid command is recognized then the data structure is updated coherently
 //
 // INPUT
 // - cmdStruc_pt: pointer to basicCommand struct type (this struct has to be instantiated by the caller).
 // OUTPUT
-// - returns a 1 if a valid command is read, otherwise it returns a 0
+// - returns a 0 if a valid command is read, otherwise it returns -1
 // CALLED FUNCTIONS
 // - readChar()
 // MEMORY NEEDS
