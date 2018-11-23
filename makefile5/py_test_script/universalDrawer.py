@@ -1,8 +1,8 @@
 #!/bin/python
-MDIM=127
+MDIM=128
 CMDFILE="common/cmd.txt"
 OUTFILE="common/py_matrix.txt"
-frameBuffer=[[0 for x in range(MDIM+1)] for y in range(MDIM+1)]
+frameBuffer=[[0 for x in range(MDIM)] for y in range(MDIM)]
 FILEC=open(CMDFILE,"r")
 
 def drawPoint(x1,y1,mode):
@@ -30,11 +30,6 @@ for line in FILEC:
         x2=100*int(line[7])+10*int(line[8])+int(line[9])
         y2=100*int(line[10])+10*int(line[11])+int(line[12])
         mode=int(line[13])
-        print (x1)
-        print (y1)
-        print (x2)
-        print (y2)
-        print (mode)
         #algorithm
         dj=abs(x2-x1)
         di=abs(y2-y1)
@@ -69,8 +64,8 @@ for line in FILEC:
         print("Supposed Ellipse")
     elif line[0] == 'Q':
         FILEO=open(OUTFILE,"w")
-        for row in range(MDIM+1):
-            for coloumn in range(MDIM+1):
+        for row in range(MDIM):
+            for coloumn in range(MDIM):
                 FILEO.write(str(frameBuffer[row][coloumn]))
             FILEO.write("\n")
         FILEO.close()
