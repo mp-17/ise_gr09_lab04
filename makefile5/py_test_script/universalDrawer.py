@@ -1,5 +1,6 @@
 #!/bin/python
 MDIM=128
+rowsFrame=128
 CMDFILE="common/cmd.txt"
 OUTFILE="common/py_matrix.txt"
 frameBuffer=[[0 for x in range(MDIM)] for y in range(MDIM)]
@@ -61,7 +62,64 @@ for line in FILEC:
             j+=1
             eps+=di
     elif line[0] == 'E':
-        print("Supposed Ellipse")
+        xc=100*int(line[1])+10*int(line[2])+int(line[3])
+        yc=100*int(line[4])+10*int(line[5])+int(line[6])
+        dx=100*int(line[7])+10*int(line[8])+int(line[9])
+        dy=100*int(line[10])+10*int(line[11])+int(line[12])
+        m=int(line[13])
+        #algorithm -start
+        #--vertical part
+        x=0
+        y=dx//2
+        sigma = 2*(dx//2 * dx//2)+(dy//2 * dy//2)*(1-2*dx//2)
+        while (dx//2 * dx//2)*x <= (dy//2 * dy//2)*y :
+            if ((rowsFrame-1-yc+x)>=0 and (rowsFrame-1-yc+x)<=rowsFrame-1):
+                if ((xc+y)>=0 and (xc+y)<=rowsFrame-1):
+                    if ((yc+x) != (yc-x)):
+                        drawPoint(xc+y, yc-x, m)
+            if ((rowsFrame-1-yc-x)>=0 and (rowsFrame-1-yc-x)<=rowsFrame-1):
+                if ((xc+y)>=0 and (xc+y)<=rowsFrame-1):
+                    drawPoint(xc+y, yc+x, m)
+            if ((rowsFrame-1-yc+x)>=0 and (rowsFrame-1-yc+x)<=rowsFrame-1):
+                if ((xc-y)>=0 and (xc-y)<=rowsFrame-1):
+                    if ((yc-x) != (yc+x)):
+                        drawPoint(xc-y, yc-x, m)
+            if ((rowsFrame-1-yc-x)>=0 and (rowsFrame-1-yc-x)<=rowsFrame-1):
+                if ((xc-y)>=0 and (xc-y)<=rowsFrame-1):
+                    drawPoint(xc-y, yc+x, m)
+            x_last = x
+            y_last = y
+            if (sigma >= 0):
+                sigma += 4 * (dy//2 * dy//2) * (1 - y)
+                y=y-1
+            sigma += (dx//2 * dx//2) * ((4 * x) + 6)
+            x=x+1
+        #---horizontal part
+        x=dy//2
+        y=0
+        sigma = 2*(dy//2 * dy//2)+(dx//2 * dx//2)*(1-2*dy//2)
+        while (dy//2 * dy//2)*y <= (dx//2 * dx//2)*x :
+            if (x!=x_last or y!=y_last):
+                if ((rowsFrame-1-yc+x)>=0 and (rowsFrame-1-yc+x)<=rowsFrame-1):
+                    if ((xc+y)>=0 and (xc+y)<=rowsFrame-1):
+                        if ((xc+y) != (xc-y)):
+                            drawPoint(xc+y, yc-x, m)
+                if ((rowsFrame-1-yc-x)>=0 and (rowsFrame-1-yc-x)<=rowsFrame-1):
+                    if ((xc+y)>=0 and (xc+y)<=rowsFrame-1):
+                        if ((xc+y) != (xc-y)):
+                            drawPoint(xc+y, yc+x, m)
+                if ((rowsFrame-1-yc+x)>=0 and (rowsFrame-1-yc+x)<=rowsFrame-1):
+                    if ((xc-y)>=0 and (xc-y)<=rowsFrame-1):
+                        drawPoint(xc-y, yc-x, m)
+                if ((rowsFrame-1-yc-x)>=0 and (rowsFrame-1-yc-x)<=rowsFrame-1):
+                    if ((xc-y)>=0 and (xc-y)<=rowsFrame-1):
+                        drawPoint(xc-y, yc+x, m)
+            if (sigma >= 0):
+                sigma += 4 * (dx//2 * dx//2) * (1 - x)
+                x=x-1
+            sigma += (dy//2 * dy//2) * ((4 * y) + 6)
+            y=y+1
+        #algorithm -end
     elif line[0] == 'Q':
         FILEO=open(OUTFILE,"w")
         for row in range(MDIM):
