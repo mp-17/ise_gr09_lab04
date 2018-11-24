@@ -56,11 +56,22 @@
 		e le opzioni di compilazione in modo statico oppure dando la possibilità di scelta all'utente.
 		\paragraph*{Versione 1}
 		In questa versione del makefile è stata definita una variabile ``CC" per rendere più pulito il file che di default imposta come compilatore gcc. \\
-		Il make file ha un target fittizio ``all" senza ricette ma con unica dipendenza il file eseguibile che si vuole creare (universalDrawer in questo caso), in questo modo il makefile cerca subito quali sono i target che servono per la dipendenza dell'eseguibile. \\
-		Volendo strutturare il file in modo esplicito, è stato definito un target per ogni file oggetto utile a generare l'eseguibile. Tra le dipendenze di ogni file oggetto sono stati inseriti i file .c e .h necessari per la compilazione.
+		Il make file ha un target fittizio ``all" senza ricette e con unica dipendenza: il file eseguibile che si vuole creare, universalDrawer in questo caso.
+                In questo modo il makefile cerca subito quali sono i target che servono per la dipendenza dell'eseguibile. \\
+		Volendo strutturare il file in modo esplicito, è stato definito un target per ogni file oggetto utile a generare l'eseguibile.
+                Tra le dipendenze di ogni file oggetto sono stati inseriti i file .c e .h necessari per la compilazione.
 		Come ultimo target è stato definito ``clean" che è senza dipendenze e che semplicemente rimuove, se richiesto, tutti i file oggetto e il file eseguibile presenti nella stessa directory del makefile 
 		\paragraph*{Versione 2}
 		\paragraph*{Versione 3}
+                Il terzo makefile assolve le specifiche richieste mediante l'uso di variabili e compilazione condizionale. Dapprima si controlla se la variabile PREFIX è stata definita all'esecuzione del comando make:
+                se sì, viene utlizzato come compilatore $(PREFI)X-gcc, in caso contrario gcc. La definizione o meno di PREFIX condiziona il valore della variabile OPZIONE.
+                Se si definisce PREFIX=arm-none-eabi, viene eseguito il compilatore arm-none-eabi con la specifica addizionale --specs=nosys.specs. Tutto questo è possibile mediante l'uso di un'ulteriore
+                compilazione condizionale che fa uso delle variabili COMPILATORE\_1 e COMPILATORE\_2.
+                Qualunque sia il compilatore scelto, la compilazione viene eseguita sempre con l'opzione -static.
+                Il Makefile si serve anche di altre tre variabili, al fine di specificare il percorso dei file.c, e le cartelle di destinazione dei file oggetto ed eseguibile.
+                Quest'ultime vengono create rispettivamente attraverso la ricetta del target main.o e del target universalDrawer.
+                Il target clean rimuove ricorsivamente le cartelle creata e i file oggetto ed eseguibile al loro interno.
+                Anche in questo Makefile si fa uso del target fittizio all.
 		\paragraph*{Versione 4}
 			Il Makefile è stato fatto per sfruttare il più possibile le regole implicite. Tutti i files .c vengono tradotti
 			nei corrispettivi files oggetto .o.
