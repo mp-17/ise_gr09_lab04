@@ -52,6 +52,7 @@ clean:
 
 .PHONY: test
 test:
+	mkdir -p $(CPATH)
 	python3 $(SPATH)/inputGenerator.py
 	python3 $(SPATH)/universalDrawer.py
 	$(EPATH)/$(MAIN) < $(CPATH)/cmd.txt

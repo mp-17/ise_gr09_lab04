@@ -75,8 +75,11 @@
 		\paragraph*{Versione 4}
 			Il Makefile è stato fatto per sfruttare il più possibile le regole implicite. Tutti i files .c vengono tradotti
 			nei corrispettivi files oggetto .o.
-		\paragraph*{Versione 5}
-		Il Makefile ha le stesse funzionalità previste nelle altre versioni ma in questo caso presenta come target aggiuntivo ``test``, il quale ha come dipendenza l'eseguibile del programma e come ricetta l'esecuzione dello script ``test\textunderscore lab3\textunderscore script.sh". Lo script serve per verificare che il programma universalDrawer funzioni correttamente confrontando il suo output con quello di un file di test.
+		%\paragraph*{Versione 5}
+		%Il Makefile ha le stesse funzionalità previste nelle altre versioni ma in questo caso presenta come target aggiuntivo
+		%``test``, il quale ha come dipendenza l'eseguibile del programma e come ricetta l'esecuzione dello script 
+		%``test\textunderscore lab3\textunderscore script.sh". Lo script serve per verificare che il programma universalDrawer
+		%funzioni correttamente confrontando il suo output con quello di un file di test.
 \section{Implementazione del test}
 	Per la realizzazione del target test si è deciso di dividere la verifica del codice scritto per il precedente laboratorio 
 	in 4 parti:
@@ -90,24 +93,36 @@
 	partenza, non c'è modo di accorgersene. I casi limite inoltre non vengono così testati perché i comandi al punto 1 vengono 
 	per definizione prodotti al fine di rispettare le specifiche.
 
-	\subsubsection*{Generazione dei comandi}
-		Lo script per la generazione dei comandi accetta dall'utente un certo numero di comandi che vengono creati usando la funzione \textit{randint} contenuta nel modulo \textit{random}. Infine i comandi generati vengono scritti all'interno di un file che verrà poi passato ai file eseguibile.
-		L'esecuzione finisce con la scrittura di un \textbf{token} che segnala la fine dello stream di comandi.
-
-	\subsubsection*{Script di test}
-	Lo script di test viene eseguito mediante il comando ``make test" (usando la versione 5 del Makefile). Viene prima lanciato il programma in python inputGenerator.py per generare i comandi di prova. Questi,
-        contenuti nel file cmd.txt, vengono letti riga per riga e salvati dentro una variabile di appoggio.
-        La sequenza dei comandi di prova viene passata attraverso una pipe all'eseguibile, che, opportunamente modificato, crea un file di uscita con la matrice modificata.
-        Viene infine eseguito il file universalDrawer.py, che produce il file py\_matrix.txt, contenente l'output che ci si aspetta dall'eseguibile.
-        Il file con la matrice appena generata e il file con la matrice attesa py\_matrix.txt vengono confrontati con il comando ``diff -s" per segnalare la presenza o meno di errori.
-		%TODO io la parte sotto la toglierei --Luca
-%		Lo script di test che produce il risultato esatto dall'esecuzione dei comandi, come già specificato in precedenza, si basa sugli stessi algoritmi di riferimento del codice C. Genera e modifica una matrice di interi più facilmente accedibile e 
-%		modificabile che della struttura usata nel codice originale. Ulteriori vantaggi dell'utilizzo del python sono dovuti alla completa assenza di interfacce e libertà di gestione della realizzazione del codice. 
-
 	\subsubsection*{Modifica del programma}
 		Il programma è stato modificato per poter riconoscere il comando di QUITTING ('Q'). Appena esso viene ricevuto
 		viene chiamata una funzione che apre un file, disegna la matrice (frameBuffer) e poi lo chiude. In questo modo 
 		diventa semplice il confronto tra le due matrici generate dai programmi scritti in diversi linguaggi.
 		L'interfaccia del programma è stata anche regolarizzata per rientrare nelle specifiche di interfaccia.
+
+	\subsubsection*{Generazione dei comandi}
+		Lo script per la generazione dei comandi accetta dall'utente un certo numero di comandi che vengono creati usando la funzione \textit{randint} contenuta nel modulo \textit{random}. Infine i comandi generati vengono scritti all'interno di un file che verrà poi passato ai file eseguibile.
+		L'esecuzione finisce con la scrittura di un \textbf{token} che segnala la fine dello stream di comandi.
+
+	\subsubsection*{Automazione del test con Makefile}
+		Il test è stato integrato nel Makefile utilizzando un altro phony target di nome "test". Esso contiene come
+		ricetta delle istruzioni bash che eseguono lo script python per la generazione dei comandi casuali, poi lo script
+		python per la generazione del file di comparazione (che prende gli ingressi dal file appena generato). Il file con
+		i comandi viene reindirizzato anche come stdin per il programma main da testare, in questo modo con una semplice 
+		diff è possibile vedere a terminale se sono presenti incongruenze.
+
+	%\subsubsection*{Script di test}
+	%Lo script di test viene eseguito mediante il comando ``make test" (usando la versione 5 del Makefile). Viene prima lanciato
+	% il programma in python inputGenerator.py per generare i comandi di prova. Questi,
+   %    contenuti nel file cmd.txt, vengono letti riga per riga e salvati dentro una variabile di appoggio.
+   %    La sequenza dei comandi di prova viene passata attraverso una pipe all'eseguibile, che, opportunamente modificato, crea
+   %    un file di uscita con la matrice modificata.
+   %    Viene infine eseguito il file universalDrawer.py, che produce il file py\_matrix.txt, contenente l'output che ci si
+   %     aspetta dall'eseguibile.
+   %    Il file con la matrice appena generata e il file con la matrice attesa py\_matrix.txt vengono confrontati con il
+   %     comando ``diff -s" per segnalare la presenza o meno di errori.
+		%TODO io la parte sotto la toglierei --Luca
+%		Lo script di test che produce il risultato esatto dall'esecuzione dei comandi, come già specificato in precedenza, si basa sugli stessi algoritmi di riferimento del codice C. Genera e modifica una matrice di interi più facilmente accedibile e 
+%		modificabile che della struttura usata nel codice originale. Ulteriori vantaggi dell'utilizzo del python sono dovuti alla completa assenza di interfacce e libertà di gestione della realizzazione del codice. 
+
 
 \end{document}
