@@ -95,7 +95,11 @@
 		L'esecuzione finisce con la scrittura di un \textbf{token} che segnala la fine dello stream di comandi.
 
 	\subsubsection*{Script di test}
-		Lo script di test viene eseguito mediante il comando ``make test" (usando la versione 5 del Makefile) e viene prima lanciato il programma in python $<$...$>$ per generare i comandi di prova, questi ultimi contenuti nel file <...> vengono letti riga per riga e salvati dentro una variabile di appoggio. La sequenza dei comandi di prova vengono passati attraverso uno standard output in pipe con l'eseguibile che, opportunamente modificato, crea un file di uscita con la matrice modificata. Il file con la matrice appena generata e il file con la matrice attesa (<...>) vengono confrontati con il comando ``diff -s" per segnalare la presenza o meno di errori.
+	Lo script di test viene eseguito mediante il comando ``make test" (usando la versione 5 del Makefile). Viene prima lanciato il programma in python inputGenerator.py per generare i comandi di prova. Questi,
+        contenuti nel file cmd.txt, vengono letti riga per riga e salvati dentro una variabile di appoggio.
+        La sequenza dei comandi di prova viene passata attraverso una pipe all'eseguibile, che, opportunamente modificato, crea un file di uscita con la matrice modificata.
+        Viene infine eseguito il file universalDrawer.py, che produce il file py\_matrix.txt, contenente l'output che ci si aspetta dall'eseguibile.
+        Il file con la matrice appena generata e il file con la matrice attesa py\_matrix.txt vengono confrontati con il comando ``diff -s" per segnalare la presenza o meno di errori.
 		%TODO io la parte sotto la toglierei --Luca
 %		Lo script di test che produce il risultato esatto dall'esecuzione dei comandi, come già specificato in precedenza, si basa sugli stessi algoritmi di riferimento del codice C. Genera e modifica una matrice di interi più facilmente accedibile e 
 %		modificabile che della struttura usata nel codice originale. Ulteriori vantaggi dell'utilizzo del python sono dovuti alla completa assenza di interfacce e libertà di gestione della realizzazione del codice. 
