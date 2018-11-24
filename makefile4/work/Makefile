@@ -43,7 +43,7 @@ $(OPATH)/%.o: %.c $(IPATH)/draw.h $(IPATH)/read.h $(IPATH)/shared.h $(IPATH)/aid
 # cleaning recipe
 .PHONY: clean
 clean:
-	rm -f $(OPATH)/*.o $(EPATH)/$(MAIN)	
+	rm -r -f $(OPATH) $(EPATH)
 
 .PHONY: test
 test:

@@ -7,6 +7,10 @@ IPATH=./include
 OPATH=./obj
 # exe file path
 EPATH=./exe
+# script files path
+SPATH=./script
+# common path
+CPATH=./common
 
 ## OPTIONS ##
 ifdef PREFIX
@@ -35,6 +39,7 @@ all: $(EPATH)/$(MAIN)
 $(EPATH)/$(MAIN): $(OBJ)
 	mkdir -p $(EPATH)
 	$(LINK) $^ -o $@
+	chmod +x $(EPATH)/$(MAIN) 
 
 $(OPATH)/%.o: %.c $(IPATH)/draw.h $(IPATH)/read.h $(IPATH)/shared.h $(IPATH)/aid.h
 	mkdir -p $(OPATH)
@@ -47,4 +52,7 @@ clean:
 
 .PHONY: test
 test:
-	# test
+	python3 $(SPATH)/inputGenerator.py
+	python3 $(SPATH)/universalDrawer.py
+	$(EPATH)/$(MAIN) < $(CPATH)/cmd.txt
+	diff $(CPATH)/py_matrix.txt $(CPATH)/drawnMtx.txt  

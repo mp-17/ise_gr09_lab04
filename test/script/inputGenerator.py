@@ -1,6 +1,6 @@
 #!/bin/python3
 
-FNAME="common/cmd.txt"
+FNAME="./common/cmd.txt"
 ENDMSG="Q"
 MAX_X=127
 MAX_Y=127
