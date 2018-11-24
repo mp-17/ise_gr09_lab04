@@ -3,11 +3,6 @@ CC= gcc
 
 ODIR = $(pwd)
 
-_DEPS = shared.h read.h draw.h
-DEPS = $(pathsubst %, $(ODIR)/%, $(_DEPS))
-
-_OBJ = main.o draw.o read.o
-
 all: universalDrawer
 
 universalDrawer: main.o draw.o read.o
@@ -16,10 +11,10 @@ universalDrawer: main.o draw.o read.o
 draw.o: draw.c shared.h draw.h
 	$(CC) -c -Wall -static draw.c
 
-read.o: read.c shared.h draw.h
+read.o: read.c read.h
 	$(CC) -c -Wall -static read.c
 
-main.o: main.c
+main.o: main.c draw.h read.h
 	$(CC) -c -Wall -static main.c
 
 .PHONY: clean

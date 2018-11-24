@@ -20,7 +20,7 @@
 %\usepackage[colorlinks]{hyperref} %package to change colors
 \usepackage{listings} %code snippet inside text
 \title{Integrazione di Sistemi Embedded\\ Laboratorio 04}
-\author{Matteo Perotti 251453\\ Giuseppe Puletto\\ Luca Romani 255244\\ Giuseppe Sarda 255648} 
+\author{Matteo Perotti 251453\\ Giuseppe Puletto 251437\\ Luca Romani 255244\\ Giuseppe Sarda 255648} 
 
 \begin{document}
 \maketitle
@@ -28,12 +28,10 @@
 \newpage
 
 \section{Introduzione}
-	Il quarto laboratorio ha come obiettivo l'esplorazione delle possibilità che il comando \textbf{make} può fornire al
-	programmatore durante la fase di test di un determinato progetto. Strumento fondamentale per questa fase è il file 
-	\textbf{Makefile}.
+	Il quarto laboratorio ha come obiettivo l'esplorazione delle funzionalità che il comando \textbf{make} può offrire tra le quali il testing e la generazione automatizzata del file eseguibile. Strumento fondamentale per questa fase è il file \textbf{Makefile} usato da make.
 
 \section{Approccio alla scrittura del Makefile}
-	Per la scrittura del Makefile, il quale contiene tutte le "ricette" necessarie per la completa compilazione di un progetto, 
+	Per la scrittura del Makefile, il quale contiene tutte le ``ricette" necessarie per la completa compilazione di un progetto, 
 	si è consultato il manuale GNU relativo al comando  \textit{make} reperibile alla pagina web 
 	\href{https://www.gnu.org/software/make/manual/make.html}{GNU make}.\\
 	Di seguito sono riportate le informazioni più rilevanti ricavate dal manuale, alcune delle quali sono state usate 
@@ -41,8 +39,9 @@
 
 	\subsubsection*{Phony targets}
 		Usando il "token" \textbf{.PHONY} si riesce ad indicare un target che non corrisponde al nome di un vero e proprio file, 
-		ma ad una ricetta eseguita soltanto se espressamente richiesto. Questa direttiva è utile in caso di omonimia tra un taget 
-		e un file, i quali però non sono logicamente collegati, e che quindi, senza un'indicazione specifica, sarebbero 
+		ma ad una ricetta eseguita soltanto se espressamente richiesto. Questa direttiva è utile in caso di omonimia tra un target 
+		e un file, %TODO da questa parte fino al ``Dichiarando dunque" la toglierei perchè poco chiara, la parte sotto secondo me basta a spiegare --Luca 
+		i quali però non sono logicamente collegati, e che quindi, senza un'indicazione specifica, sarebbero 
 		erroneamente vincolati.
 		Dichiarando dunque:
 		\begin{lstlisting}{bash}
@@ -56,18 +55,23 @@
 		Il Makefile è stato sviluppato in diversi modi, utilizzando regole esplicite ed implicite e variando il compilatore
 		e le opzioni di compilazione in modo statico oppure dando la possibilità di scelta all'utente.
 		\paragraph*{Versione 1}
+		In questa versione del makefile è stata definita una variabile ``CC" per rendere più pulito il file che di default imposta come compilatore gcc. \\
+		Il make file ha un target fittizio ``all" senza ricette ma con unica dipendenza il file eseguibile che si vuole creare (universalDrawer in questo caso), in questo modo il makefile cerca subito quali sono i target che servono per la dipendenza dell'eseguibile. \\
+		Volendo strutturare il file in modo esplicito, è stato definito un target per ogni file oggetto utile a generare l'eseguibile. Tra le dipendenze di ogni file oggetto sono stati inseriti i file .c e .h necessari per la compilazione.
+		Come ultimo target è stato definito ``clean" che è senza dipendenze e che semplicemente rimuove, se richiesto, tutti i file oggetto e il file eseguibile presenti nella stessa directory del makefile 
 		\paragraph*{Versione 2}
 		\paragraph*{Versione 3}
 		\paragraph*{Versione 4}
 			Il Makefile è stato fatto per sfruttare il più possibile le regole implicite. Tutti i files .c vengono tradotti
 			nei corrispettivi files oggetto .o.
-
+		\paragraph*{Versione 5}
+		Il Makefile ha le stesse funzionalità previste nelle altre versioni ma in questo caso presenta come target aggiuntivo ``test``, il quale ha come dipendenza l'eseguibile del programma e come ricetta l'esecuzione dello script ``test\textunderscore lab3\textunderscore script.sh". Lo script serve per verificare che il programma universalDrawer funzioni correttamente confrontando il suo output con quello di un file di test.
 \section{Implementazione del test}
 	Per la realizzazione del target test si è deciso di dividere la verifica del codice scritto per il precedente laboratorio 
 	in 4 parti:
 	\begin{itemize}
 		\item Creazione di uno script Python in grado di generare comandi di disegno casuali sotto specifiche
-		\item Scrittura di un codice Python, basato sugli identici algoritmi usati durante il precedente lab, che si comportasse secondo specifiche relativamente alla parte funzionale ma che lasciasse totale libertà implementativa
+		\item Scrittura di un codice Python, basato sugli identici algoritmi usati durante il precedente lab, che si comportasse secondo specifiche relative alla parte funzionale ma che lasciasse totale libertà implementativa
 		\item Esecuzione dei comandi generati al punto uno da parte del codice C e dello script Python
 		\item Confronto dell'output finale delle due esecuzioni
 	\end{itemize}
@@ -76,12 +80,14 @@
 	per definizione prodotti al fine di rispettare le specifiche.
 
 	\subsubsection*{Generazione dei comandi}
-		Lo script per la generazione dei comandi accetta dall'utente un numero di comandi totali che crea usando la funzione \textit{randint} contenuta nel modulo \textit{random}. Infine i comandi generati vengono scritti all'interno di un file che verrà poi passato ai file eseguibile.
+		Lo script per la generazione dei comandi accetta dall'utente un certo numero di comandi che vengono creati usando la funzione \textit{randint} contenuta nel modulo \textit{random}. Infine i comandi generati vengono scritti all'interno di un file che verrà poi passato ai file eseguibile.
 		L'esecuzione finisce con la scrittura di un \textbf{token} che segnala la fine dello stream di comandi.
 
 	\subsubsection*{Script di test}
-		Lo script di test che produce il risultato esatto dall'esecuzione dei comandi, come già specificato in precedenza, si basa sugli stessi algoritmi di riferimento del codice C. Genera e modifica una matrice di interi più facilmente accedibile e 
-		modificabile che della struttura usata nel codice originale. Ulteriori vantaggi dell'utilizzo del python sono dovuti alla completa assenza di interfacce e libertà di gestione della realizzazione del codice. 
+		Lo script di test viene eseguito mediante il comando ``make test" (usando la versione 5 del Makefile) e viene prima lanciato il programma in python $<$...$>$ per generare i comandi di prova, questi ultimi contenuti nel file <...> vengono letti riga per riga e salvati dentro una variabile di appoggio. La sequenza dei comandi di prova vengono passati attraverso uno standard output in pipe con l'eseguibile che, opportunamente modificato, crea un file di uscita con la matrice modificata. Il file con la matrice appena generata e il file con la matrice attesa (<...>) vengono confrontati con il comando ``diff -s" per segnalare la presenza o meno di errori.
+		%TODO io la parte sotto la toglierei --Luca
+%		Lo script di test che produce il risultato esatto dall'esecuzione dei comandi, come già specificato in precedenza, si basa sugli stessi algoritmi di riferimento del codice C. Genera e modifica una matrice di interi più facilmente accedibile e 
+%		modificabile che della struttura usata nel codice originale. Ulteriori vantaggi dell'utilizzo del python sono dovuti alla completa assenza di interfacce e libertà di gestione della realizzazione del codice. 
 
 	\subsubsection*{Modifica del programma}
 		Il programma è stato modificato per poter riconoscere il comando di QUITTING ('Q'). Appena esso viene ricevuto
