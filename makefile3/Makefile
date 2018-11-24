@@ -1,14 +1,17 @@
 COMPILATORE_1 = gcc
 COMPILATORE_2 = arm-none-eabi-gcc
+
 ifdef PREFIX
+JOIN=-
 else
-PREFIX=gcc
+PREFIX=
+JOIN=
 endif
 
-ifeq ($(PREFIX), $(COMPILATORE_1))
+ifeq ($(PREFIX)$(JOIN)gcc, $(COMPILATORE_1))
 OPZIONE=-static
 endif
-ifeq ($(PREFIX), $(COMPILATORE_2))
+ifeq ($(PREFIX)$(JOIN)gcc, $(COMPILATORE_2))
 OPZIONE=--specs=nosys.specs
 endif
 
@@ -21,17 +24,17 @@ all: universalDrawer
 
 main.o: $(DIR_INCLUDE)/main.c $(DIR_INCLUDE)/read.h $(DIR_INCLUDE)/draw.h
 	mkdir $(DIR_OBJ)
-	$(PREFIX) -Wall -o $(DIR_OBJ)/main.o -c $<
+	$(PREFIX)$(JOIN)gcc -Wall -o $(DIR_OBJ)/main.o -c $<
 
 draw.o: $(DIR_INCLUDE)/draw.c $(DIR_INCLUDE)/draw.h $(DIR_INCLUDE)/shared.h
-	$(PREFIX) -Wall -o $(DIR_OBJ)/draw.o -c $<
+	$(PREFIX)$(JOIN)gcc -Wall -o $(DIR_OBJ)/draw.o -c $<
 
 read.o: $(DIR_INCLUDE)/read.c $(DIR_INCLUDE)/read.h
-	$(PREFIX) -Wall -o $(DIR_OBJ)/read.o -c $<
+	$(PREFIX)$(JOIN)gcc -Wall -o $(DIR_OBJ)/read.o -c $<
 
 universalDrawer : main.o draw.o read.o
 	mkdir $(DIR_EXE)
-	$(PREFIX) -Wall $(OPZIONE) -o $(DIR_EXE)/universalDrawer  $(DIR_OBJ)/main.o $(DIR_OBJ)/draw.o $(DIR_OBJ)/read.o
+	$(PREFIX)$(JOIN)gcc -Wall $(OPZIONE) -o $(DIR_EXE)/universalDrawer  $(DIR_OBJ)/main.o $(DIR_OBJ)/draw.o $(DIR_OBJ)/read.o
 	chmod +x $(DIR_EXE)/universalDrawer
 
 .PHONY: clean
