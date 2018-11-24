@@ -12,7 +12,7 @@ ifeq ($(PREFIX)$(JOIN)gcc, $(COMPILATORE_1))
 OPZIONE=-static
 endif
 ifeq ($(PREFIX)$(JOIN)gcc, $(COMPILATORE_2))
-OPZIONE=--specs=nosys.specs
+OPZIONE=--specs=nosys.specs -static
 endif
 
 
