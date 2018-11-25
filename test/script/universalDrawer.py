@@ -1,7 +1,7 @@
 #!/bin/python
 MDIM=128
 rowsFrame=128
-CMDFILE="./common/cmd.txt"
+CMDFILE="./common/cmdpy.txt"
 OUTFILE="./common/py_matrix.txt"
 frameBuffer=[[0 for x in range(MDIM)] for y in range(MDIM)]
 FILEC=open(CMDFILE,"r")
