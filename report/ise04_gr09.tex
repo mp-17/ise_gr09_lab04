@@ -75,6 +75,17 @@
 		\paragraph*{Versione 4}
 			Il Makefile è stato fatto per sfruttare il più possibile le regole implicite. Tutti i files .c vengono tradotti
 			nei corrispettivi files oggetto .o.
+			Quando viene chiamato il compilatore vengono aggiunte delle opzioni specifiche differenti da quando viene chiamato
+			il linker (tutto racchiuso in variabili).
+			Come nella precedente versione è possibile impostare la toolchain da utilizzare esplicitando il valore della
+			variabile PREFIX direttamente quando viene chiamato il comando make.
+			E' stato previsto anche un target phony "test" (per ora lasciato vuoto) per poter rendere agevole il test
+			del programma eseguibile, ma la ricetta per questo target verrà scritta nel Makefile successivo.
+			Come per le versioni precedenti anche questo Makefile contiene un phony target "clean" per gestire la rimozione
+			dei files oggetto ed eseguibili, ad esempio qualora si volesse modificare la toolchain da una volta
+			all'altra.
+			In ogni ricetta relativa a target non-phony è presente anche un comando mkdir per creare la folder relativa:
+			l'opzione -p evita che venga dato errore qualora la cartella fosse già presente.
 		%\paragraph*{Versione 5}
 		%Il Makefile ha le stesse funzionalità previste nelle altre versioni ma in questo caso presenta come target aggiuntivo
 		%``test``, il quale ha come dipendenza l'eseguibile del programma e come ricetta l'esecuzione dello script 
@@ -103,7 +114,9 @@
 		Lo script per la generazione dei comandi accetta dall'utente un certo numero di comandi che vengono creati usando la funzione \textit{randint} contenuta nel modulo \textit{random}. Infine i comandi generati vengono scritti all'interno di un file che verrà poi passato ai file eseguibile.
 		L'esecuzione finisce con la scrittura di un \textbf{token} che segnala la fine dello stream di comandi.
 
-	\subsubsection*{Automazione del test con Makefile}
+	\subsubsection*{Automazione del test con Makefile}		
+		Il makefile è stato aggiornato con nuove dipendenze per processare i files aid.c e aid.h (e shared.h che ora
+		viene condiviso anche con main.c).
 		Il test è stato integrato nel Makefile utilizzando un altro phony target di nome "test". Esso contiene come
 		ricetta delle istruzioni bash che eseguono lo script python per la generazione dei comandi casuali, poi lo script
 		python per la generazione del file di comparazione (che prende gli ingressi dal file appena generato). Il file con
