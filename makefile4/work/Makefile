@@ -14,7 +14,7 @@ ifdef PREFIX
 	LOPTIONS=-Wall -static --specs=nosys.specs
 else
 	COMPILER=gcc
-	LOPTIONS=-Wall
+	LOPTIONS=-Wall -static
 endif
 COPTIONS=-Wall -iquote $(IPATH) -c
 COMPILE=$(COMPILER) $(COPTIONS)
