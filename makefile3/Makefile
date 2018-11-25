@@ -18,12 +18,13 @@ ifeq ($(PREFIX)$(JOIN)gcc, $(COMPILATORE_2))
 OPZIONE=--specs=nosys.specs -static
 endif
 
-
-DIR_OBJ=./obj #OBJECT FILES PATH
-DIR_EXE=./exe #EXE FILE PATH
+#DIRECTORIES FOR OBJECT FILES, EXE FILES, .H FILES, .C FILES
+#CFLAGS IS NEEDED BY GCC WHEN .H FILES PATH DIFFERS FROM .C FILES PATH
+DIR_OBJ=./obj
+DIR_EXE=./exe
+DIR_INCLUDE=./include
 DIR_CFILES=.
-DIR_INCLUDE=./include #.H FILES PATH
-CFLAGS=-iquote $(DIR_INCLUDE) #GCC NEEDS IT IF THE .H FILES PATH DIFFERS FROM THE .C PATH
+CFLAGS=-iquote $(DIR_INCLUDE)
 
 all: $(DIR_EXE)/universalDrawer
 
@@ -40,7 +41,7 @@ $(DIR_OBJ)/read.o: $(DIR_CFILES)/read.c $(DIR_INCLUDE)/read.h
 $(DIR_OBJ)/aid.o: $(DIR_CFILES)/aid.c $(DIR_INCLUDE)/aid.h $(DIR_INCLUDE)/shared.h
 	$(PREFIX)$(JOIN)gcc -Wall -o $(DIR_OBJ)/aid.o -c $< $(CFLAGS)
 
-$(DIR_EXE)/universalDrawer : $(DIR_OBJ)/main.o $(DIR_OBJ)/draw.o $(DIR_OBJ)/read.o $(DIR_OBJ)/aid.o
+$(DIR_EXE)/universalDrawer: $(DIR_OBJ)/main.o $(DIR_OBJ)/draw.o $(DIR_OBJ)/read.o $(DIR_OBJ)/aid.o
 	mkdir -p $(DIR_EXE)
 	$(PREFIX)$(JOIN)gcc -Wall $(OPZIONE) -o $(DIR_EXE)/universalDrawer  $(DIR_OBJ)/main.o $(DIR_OBJ)/draw.o $(DIR_OBJ)/read.o $(DIR_OBJ)/aid.o
 	chmod +x $(DIR_EXE)/universalDrawer
