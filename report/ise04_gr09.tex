@@ -55,13 +55,14 @@
 		Il Makefile è stato sviluppato in diversi modi, utilizzando regole esplicite ed implicite e variando il compilatore
 		e le opzioni di compilazione in modo statico oppure dando la possibilità di scelta all'utente.
 		\paragraph*{Versione 1}
-		In questa versione del makefile è stata definita una variabile ``CC" per rendere più pulito il file che di default imposta come compilatore gcc. \\
+		In questa versione del makefile è stata definita una variabile ``CC" per rendere più leggibile il file che di default imposta come compilatore gcc. \\
 		Il make file ha un target fittizio ``all" senza ricette e con un'unica dipendenza: il file eseguibile che si vuole creare, universalDrawer in questo caso.
                 In questo modo il makefile cerca subito quali sono i target che servono per la dipendenza dell'eseguibile. \\
 		Volendo strutturare il file in modo esplicito, è stato definito un target per ogni file oggetto utile a generare l'eseguibile.
                 Tra le dipendenze di ogni file oggetto sono stati inseriti i file .c e .h necessari per la compilazione.
 		Come ultimo target è stato definito ``clean" che è senza dipendenze e che semplicemente rimuove, se richiesto, tutti i file oggetto e il file eseguibile presenti nella stessa directory del makefile 
 		\paragraph*{Versione 2}
+		Relativamente alle versione 2 non ci sono sostanziali differenze rispetto alla precedente versione. Unica variazione si ha nell'architettura target di compilazione che, come da specifiche, deve essere per ARM.
 		\paragraph*{Versione 3}
                 Il terzo makefile assolve le specifiche richieste mediante l'uso di variabili e compilazione condizionale. Dapprima si controlla se la variabile PREFIX è stata definita all'esecuzione del comando make:
                 se sì, viene utlizzato come compilatore \$(PREFIX)-gcc, in caso contrario gcc. La definizione o meno di PREFIX condiziona il valore della variabile OPZIONE.
@@ -112,8 +113,45 @@
 
 	\subsubsection*{Generazione dei comandi}
 		Lo script per la generazione dei comandi accetta dall'utente un certo numero di comandi che vengono creati usando la funzione \textit{randint} contenuta nel modulo \textit{random}. Infine i comandi generati vengono scritti all'interno di un file che verrà poi passato ai file eseguibile.
-		L'esecuzione finisce con la scrittura di un \textbf{token} che segnala la fine dello stream di comandi.
+		L'esecuzione finisce con la scrittura di un \textbf{token} (Q) che segnala la fine dello stream di comandi.
+		All'interno del .txt che viene poi gestito dall'eseguibile del progetto C, lo script Python inserisce, tra i comandi che sono di default corretti, del "rumore casuale" rappresentato da caratteri ASCII di qualsiasi tipo: lettere, numeri, punteggiatura o \textit{white spaces}. Si noti che in questo insieme non è presente il comando di uscita Q.
+		Di seguito si riporta il codice python per una più immediata ed esemplficativa comprensione accompagnato da un esempio di file di comandi.
+		\begin{lstlisting}{python}
+		
+		
+		
+#MAX_X e' un numero massimo di caratteri generabili
 
+def noiseGenerator(out):
+	time=random.randint(0,MAX_X)
+	i=0
+	while i < time:
+		char=random.choice(string.printable)
+		if char != 'Q':
+			out.write(char)
+		i+=1
+		\end{lstlisting}
+		\begin{lstlisting}{python}
+#a fine generazione di un comando con probabilita' del 33% 
+#viene chiamata la funzione noiseGenerator
+
+noise=random.randint(0,2)
+if noise == 0:
+	noiseGenerator(f)
+		\end{lstlisting}
+		\begin{lstlisting}
+#esempio di file di comandi
+
+P1130150
+L0090580310551
+D`+V,xm|(hUohlx#utO7gv^=Tk^"W#DB2dG<0SshG5Z-gakrG>>EkMA
+O|n1,UYt=YKn[N \`Zl3t`Mf+uymAg-i.<O6yo1pi[s:304].
+WqZPx-RTrbBLe)5hL1150370911210
+P0400540
+Sgc_lFHO	hywq?V_C^r87Y/u>M&th031h
+=DN,)(roCBrL0PbS0.#Py	JqE0941031060490
+Q
+		\end{lstlisting} 
 	\subsubsection*{Automazione del test con Makefile}		
 		Il makefile è stato aggiornato con nuove dipendenze per processare i files aid.c e aid.h (e shared.h che ora
 		viene condiviso anche con main.c).
