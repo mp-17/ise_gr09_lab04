@@ -19,6 +19,7 @@
 \usepackage{xcolor} %code ambient colours
 %\usepackage[colorlinks]{hyperref} %package to change colors
 \usepackage{listings} %code snippet inside text
+\usepackage{minted}
 \title{Integrazione di Sistemi Embedded\\ Laboratorio 04}
 \author{Matteo Perotti 251453\\ Giuseppe Puletto 251437\\ Luca Romani 255244\\ Giuseppe Sarda 255648} 
 
@@ -56,7 +57,7 @@
 		e le opzioni di compilazione in modo statico oppure dando la possibilità di scelta all'utente.
 		\paragraph*{Versione 1}
 		In questa versione del makefile è stata definita una variabile ``CC" per rendere più leggibile il file che di default imposta come compilatore gcc. \\
-		Il make file ha un target fittizio ``all" senza ricette e con un'unica dipendenza: il file eseguibile che si vuole creare, universalDrawer in questo caso.
+		Il make file ha un target fittizio "all" senza ricette e con un'unica dipendenza: il file eseguibile che si vuole creare, universalDrawer in questo caso.
                 In questo modo il makefile cerca subito quali sono i target che servono per la dipendenza dell'eseguibile. \\
 		Volendo strutturare il file in modo esplicito, è stato definito un target per ogni file oggetto utile a generare l'eseguibile.
                 Tra le dipendenze di ogni file oggetto sono stati inseriti i file .c e .h necessari per la compilazione.
@@ -69,7 +70,7 @@
                 Se si definisce PREFIX=arm-none-eabi, viene eseguito il compilatore arm-none-eabi con la specifica addizionale --specs=nosys.specs. Tutto questo è possibile mediante l'uso di un'ulteriore
                 compilazione condizionale che fa uso delle variabili COMPILATORE\_1 e COMPILATORE\_2.
                 Qualunque sia il compilatore scelto, la compilazione viene eseguita sempre con l'opzione -static.
-                Il Makefile si serve anche di altre tre variabili, al fine di specificare il percorso dei file.c, e le cartelle di destinazione dei file oggetto ed eseguibile.
+                Il Makefile si serve anche di altre quattro variabili, al fine di specificare il percorso dei file.c, quello dei file.h, e le cartelle di destinazione dei file oggetto ed eseguibile.
                 Quest'ultime vengono create rispettivamente attraverso la ricetta del target main.o e del target universalDrawer.
                 Il target clean rimuove ricorsivamente le cartelle creata e i file oggetto ed eseguibile al loro interno.
                 Anche in questo Makefile si fa uso del target fittizio all.
@@ -104,6 +105,8 @@
 	Si noti che i limiti di questo test stanno nel fatto che, nel caso in cui gli algoritmi di disegno fossero sbagliati in 
 	partenza, non c'è modo di accorgersene. I casi limite inoltre non vengono così testati perché i comandi al punto 1 vengono 
 	per definizione prodotti al fine di rispettare le specifiche.
+	
+	Il codice C viene testato generando 2000 comandi casuali.
 
 	\subsubsection*{Modifica del programma}
 		Il programma è stato modificato per poter riconoscere il comando di QUITTING ('Q'). Appena esso viene ricevuto
@@ -116,9 +119,7 @@
 		L'esecuzione finisce con la scrittura di un \textbf{token} (Q) che segnala la fine dello stream di comandi.
 		All'interno del .txt che viene poi gestito dall'eseguibile del progetto C, lo script Python inserisce, tra i comandi che sono di default corretti, del "rumore casuale" rappresentato da caratteri ASCII di qualsiasi tipo: lettere, numeri, punteggiatura o \textit{white spaces}. Si noti che in questo insieme non è presente il comando di uscita Q.
 		Di seguito si riporta il codice python per una più immediata ed esemplficativa comprensione accompagnato da un esempio di file di comandi.
-		\begin{lstlisting}{python}
-		
-		
+\begin{minted}{python}
 		
 #MAX_X e' un numero massimo di caratteri generabili
 
@@ -130,18 +131,17 @@ def noiseGenerator(out):
 		if char != 'Q':
 			out.write(char)
 		i+=1
-		\end{lstlisting}
-		\begin{lstlisting}{python}
 #a fine generazione di un comando con probabilita' del 33% 
 #viene chiamata la funzione noiseGenerator
 
 noise=random.randint(0,2)
 if noise == 0:
 	noiseGenerator(f)
-		\end{lstlisting}
-		\begin{lstlisting}
-#esempio di file di comandi
 
+
+#esempio di file di comandi
+\end{minted}
+\begin{lstlisting}
 P1130150
 L0090580310551
 D`+V,xm|(hUohlx#utO7gv^=Tk^"W#DB2dG<0SshG5Z-gakrG>>EkMA
@@ -151,7 +151,7 @@ P0400540
 Sgc_lFHO	hywq?V_C^r87Y/u>M&th031h
 =DN,)(roCBrL0PbS0.#Py	JqE0941031060490
 Q
-		\end{lstlisting} 
+		\end{lstlisting}
 	\subsubsection*{Automazione del test con Makefile}		
 		Il makefile è stato aggiornato con nuove dipendenze per processare i files aid.c e aid.h (e shared.h che ora
 		viene condiviso anche con main.c).
